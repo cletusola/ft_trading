@@ -34,7 +34,7 @@ class RegisterView(generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
         serializer = RegisterSerializer(data=request.data)
 
-        if serializer.is_valid(raise_exception=False):
+        if serializer.is_valid(raise_exception=True):
             firstname = serializer.data["firstname"]
             lastname = serializer.data["lastname"]
             username = serializer.data["username"].lower()
@@ -42,158 +42,73 @@ class RegisterView(generics.CreateAPIView):
             password = serializer.data["password"]
             password_again = serializer.data["password_again"]
 
-            # check if username already exists 
-            chk_username = User.objects.filter(username__iexact=username)
-
-            # check if email already exists 
-            chk_email = User.objects.filter(email__iexact=email)
-
-
-            """ validate field data """
-
-            # check if password and password_again are the same 
-            if not re.search("[@_!#$%^&*()-<>?/\|}={+~:]", password):
-                return Response({
-                    "password_error": "Password must contain at least one special character"
-                })
-            elif len(password) < 8:
-                return Response({
-                    "password_error": "Pasword must be atleast 8 characters"
-                })
-            elif password and password_again != password:
-                return Response({
-                    "password_error": "passwords must match"
-                })
-                
-            elif not any(p.isupper() for p in password):
-                return Response({
-                    "password_error": "Password must have at least one uppercase letter"
-                })
-            elif not any(p.islower() for p in password):
-                return Response({
-                    "password_error":"Password must have at least one lowercase letter"
-                })
-            elif not any(p.isdigit() for p in password):
-                return Response({
-                    "password_error":"Password must have at least a digit"
-                })
-
-            # validate firstname 
-            elif firstname == " ":
-                return Response({
-                    "firstname_error": "Fristname is required"
-                })
-            elif len(firstname) < 2 or len(firstname) > 20:
-                return Response({
-                    "firstname_error": "Firstname must be between 2 to 20 characters long"
-                })
-
-            # validate lastname 
-            elif lastname == " ":
-                return Response({
-                    "lastname_error": "Lastname is required"
-                })
-            elif len(lastname) < 2 or len(lastname) > 20:
-                return Response({
-                    "lastname_error": "Lastname must be between 2 to 20 characters long"
-                })
-
-            # validate username
-            elif username == " ":
-                return Response({
-                    "username_error": "Username is required"
-                })
-            elif chk_username.count():
-                return Response({
-                    "username_error":"user with this username already exists"
-                })
-            elif len(username) < 4 or len(username) > 20:
-                return Response({
-                    "username_error": "Username must be between 4 to 20 characters"
-                })
-
-            # validate email 
-            elif email == " ":
-                return Response({
-                    "email_error": "Email is required"
-                })
-            elif chk_email.count():
-                return Response({
-                    "email_error":"user with this email already exists"
-                })
-            elif len(email) < 6 or len(email) > 50:
-                return Response({
-                    "email_error": "Email must be between 6 to 50 characters",
-                    "status":status.HTTP_400_BAD_REQUEST
-                })
-            else:
-                try: 
-                    # create user instance 
-                    user = User.objects.create_user(
-                        firstname=firstname,
-                        lastname=lastname,
-                        username=username,
-                        email=email,
-                        password=password
+            try: 
+                # create user instance 
+                user = User.objects.create_user(
+                    firstname=firstname,
+                    lastname=lastname,
+                    username=username,
+                    email=email,
+                    password=password
+                )
+                # save user 
+                user.save()
+                try:
+                    # create 5 times profit or loss data with random numbers for user trade 
+                    
+                    # trade 1
+                    trade1 = Trade.objects.create(
+                        profit_or_loss = random.randint(-50, 50),
+                        user = user,
+                        time = get_time(0)
                     )
-                    # save user 
-                    user.save()
-                    try:
-                        # create 5 times profit or loss data with random numbers for user trade 
-                        
-                        # trade 1
-                        trade1 = Trade.objects.create(
-                            profit_or_loss = random.randint(-50, 50),
-                            user = user,
-                            time = get_time(0)
-                        )
-                        trade1.save()
+                    trade1.save()
 
-                        # trade2
-                        trade2 = Trade.objects.create(
-                            profit_or_loss = random.randint(-50, 50),
-                            user = user,
-                            time = get_time(1)
-                        )
-                        trade2.save()
+                    # trade2
+                    trade2 = Trade.objects.create(
+                        profit_or_loss = random.randint(-50, 50),
+                        user = user,
+                        time = get_time(1)
+                    )
+                    trade2.save()
 
-                        # trade3
-                        trade3 = Trade.objects.create(
-                            profit_or_loss = random.randint(-50, 50),
-                            user = user,
-                            time = get_time(2)
-                        )
-                        trade3.save()
+                    # trade3
+                    trade3 = Trade.objects.create(
+                        profit_or_loss = random.randint(-50, 50),
+                        user = user,
+                        time = get_time(2)
+                    )
+                    trade3.save()
 
-                        # trade4
-                        trade4 = Trade.objects.create(
-                            profit_or_loss = random.randint(-50, 50),
-                            user = user,
-                            time = get_time(3)
-                        )
-                        trade4.save()
+                    # trade4
+                    trade4 = Trade.objects.create(
+                        profit_or_loss = random.randint(-50, 50),
+                        user = user,
+                        time = get_time(3)
+                    )
+                    trade4.save()
 
-                        # trade 5
-                        trade5 = Trade.objects.create(
-                            profit_or_loss = random.randint(-50, 50),
-                            user = user,
-                            time = get_time(4)
-                        )
-                        trade5.save()
-                    except:
-                        return Response({
-                            "error": "Unable to create trade",
-                        })
-
-                    return Response({
-                        "success": "User account created successfully",
-                        "status": status.HTTP_201_CREATED
-                    })
-                                        
+                    # trade 5
+                    trade5 = Trade.objects.create(
+                        profit_or_loss = random.randint(-50, 50),
+                        user = user,
+                        time = get_time(4)
+                    )
+                    trade5.save()
                 except:
                     return Response({
-                        "error": "Unable to create account",
+                        "error": "Unable to create trade data, please contact admin",
                     })
+
+                return Response({
+                    "success": "User account created successfully",
+                    "status": status.HTTP_201_CREATED
+                })
+                                    
+            except:
+                return Response({
+                    "error": "Unable to create account",
+                })
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
