@@ -23,7 +23,7 @@ class TradeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Trade
-        fields = ['id','profit_or_loss','user','time']
+        fields = ['id','balance','profit_or_loss','user','time']
 
 """ user serializer """ 
 class UserSerializer(serializers.Serializer):
