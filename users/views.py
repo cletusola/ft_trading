@@ -11,7 +11,6 @@ from rest_framework import permissions, status, generics
 from .serializers import RegisterSerializer, LoginSerializer
 from trade.models import Trade  
 
-import re 
 import random 
 from datetime import datetime, timedelta
 
@@ -95,6 +94,7 @@ class RegisterView(generics.CreateAPIView):
                         time = get_time(4)
                     )
                     trade5.save()
+                    
                 except:
                     return Response({
                         "error": "Unable to create trade data, please contact admin",
