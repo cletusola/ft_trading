@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'trade_app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
-        'NAME': 'myblog',
+        'NAME': 'FT',
     }
 }
 
