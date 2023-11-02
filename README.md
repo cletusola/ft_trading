@@ -1,4 +1,4 @@
-<h4>An API of a test project for a trading app built with pytho(django rest framework)</h4>
+<h4>An API of a test project for a trading app built with python(django rest framework)</h4>
 
 <h4>About the project</h4>
 <p> Users are automatically given $100 for trading on signup</p>
