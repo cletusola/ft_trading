@@ -6,7 +6,7 @@
 
 <h4>Apps</h4>
 <p><b>Users</b>: It contains all user related code; custom user registration, trading data generation etc.</p>
-<p><b>Trade</b>: It contains all trade related codes; It contains functions that accepts requests and sends trading data response to the frontend</p>
+<p><b>Trade</b>: It contains all trade related codes; It contains functions that accepts requests and sends trading data response to the frontend.</p>
 
 
 <p>Backend Deployment: https://fttrade.pythonanywhere.com</p>
